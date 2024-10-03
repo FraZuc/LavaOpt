@@ -106,7 +106,7 @@ def add_row(df, i, run_seq, x, y, flux_pct, tstart, tend, dtsave, fluxrate,  emi
 
 
 ### function that perform the simulations and the metropolis algorithm
-def metropolis(init_row, run_seq, samples_csv, n_vent, x_current, y_current, vents_current, flux_pct_current, tstart, tend, dtsave, fluxrate, emiss, h2o_current, log_h2o_current, fit_list, index_accepted, count_list, jump_flux_pct_array):
+def metropolis(init_row, run_seq, samples_csv, n_vent, x_current, y_current, flux_pct_current, tstart, tend, dtsave, fluxrate, emiss, h2o_current, log_h2o_current, fit_list, index_accepted, count_list, jump_flux_pct_array):
 	
 	while True:
 		indices_mtx = np.where(mtx_interval == 1)
@@ -235,10 +235,11 @@ def main():
 	tend = parameters["tend"]
 	dtsave = parameters["dtsave"]
 	vents_current = copy.deepcopy(vents)
+	seq_vents = parameters["seq_vents"]
 	
 	n_vent = len(seq_vents)    # total number of active vents considering each time interval
 	
-	n_run = (max_n_vents * 3) +1 +1      # define the number of starting points
+	n_run = (n_vent * 3) +1 +1      # define the number of starting points
 		
 
 	### run of the sequences starting from n points ###
@@ -272,7 +273,7 @@ def main():
 		x_current = np.zeros(n_vent)
 		y_current = np.zeros(n_vent)
 		
-		metropolis(init_row, run_seq, samples_csv, n_vent, x_current, y_current, vents_current, flux_pct_current, tstart, tend, dtsave, fluxrate, emiss, h2o_current, log_h2o_current, fit_list, index_accepted, count_list, jump_flux_pct_array)
+		metropolis(init_row, run_seq, samples_csv, n_vent, x_current, y_current, flux_pct_current, tstart, tend, dtsave, fluxrate, emiss, h2o_current, log_h2o_current, fit_list, index_accepted, count_list, jump_flux_pct_array)
 
 		post_process(n_vent, flux_pct_res)
 		os.chdir(main_dir)
